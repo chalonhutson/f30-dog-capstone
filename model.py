@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -15,11 +16,14 @@ class User(db.Model):
     is_trainer = db.Column(db.Boolean, default=False)
     datetime_created = db.Column(db.DateTime, default=datetime.now())
 
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
     def __init__(self, first_name, last_name, email, password, is_trainer=False):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = password
+        self.password = generate_password_hash(password)
         self.is_trainer = is_trainer
 
     def __repr__(self):

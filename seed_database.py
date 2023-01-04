@@ -9,8 +9,8 @@ connect_to_db(app)
 
 # Drop the existing database
 try:
-    os.system("dropdb dog-app")
-    os.system("createdb dog-app")
+    os.system("dropdb -U postgres dog-app")
+    os.system("createdb -U postgres dog-app")
 
 # Recreate the dog-app database
 except:

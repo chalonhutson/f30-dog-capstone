@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to the Dog App{% endblock %}
+
+{% block main %}
+
+<h1>Welcome to the Dog App</h1>
+<h2>Please Login:</h2>
+
+<form action="{{ url_for('login') }}" method="POST">
+    {{ csrf_token }}
+    {{ form.email.label }}
+    {{ form.email }}<br>
+    {{ form.password.label }}
+    {{ form.password }}<br>
+    {{ form.remember_me.label }}
+    {{ form.remember_me }}<br>
+    {{ form.submit }}
+</form>
+
+{% endblock %}

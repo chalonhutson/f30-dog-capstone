@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_required, login_user, current_user
+from flask_login import (LoginManager, 
+                        login_required, 
+                        login_user, 
+                        logout_user, 
+                        current_user)
 
 
 from model import db, connect_to_db, User
-from forms import LoginForm
+from forms import LoginForm, RegisterForm
 
 app = Flask(__name__)
 
@@ -34,12 +38,42 @@ def login():
                 return redirect(url_for("home"))
         return "incorrect login info"
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("login"))
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return "this is the register page"
-    else:
+    form = RegisterForm()
+    if form.validate_on_submit():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        password = form.password.data
+        confirm_password = form.confirm_password.data
+        is_trainer = form.is_trainer.data
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            return "Email already exists."
+
+        if password != confirm_password:
+            return "You passwords don't match"
+
+        new_user = User(first_name, last_name, email, password, is_trainer=is_trainer)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            return redirect(url_for("home"))
+        except:
+            return "Sorry there was a problem with the registeration"
         return "trying to register"
+    else:
+        return render_template("register.html", form=form)
 
 @app.route("/home")
 @login_required
@@ -50,11 +84,13 @@ def home():
         return "dog owner homepage"
 
 @app.route("/messages")
+@login_required
 def messages():
     return "here are all your messages"
 
 
 @app.route("/profile/<trainer_id>")
+@login_required
 def profile(trainer_id):
     return f"this is the profile of trainer {trainer_id}"
 

@@ -11,7 +11,14 @@
 </head>
 <body>
     <nav>
-        
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <h3>Welcome to the Dog Website {{ current_user.first_name }} {{ current_user.last_name }}</h3>
+        {% else %}
+        <h3>You aren't logged in. Would you like to register <a href="{{ url_for('register') }}">here?</a>
+
+        </h3>
+        {% endif %}
     </nav>
     <main>
         {% block main %}

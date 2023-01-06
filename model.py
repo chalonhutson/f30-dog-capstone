@@ -17,6 +17,8 @@ class User(db.Model, UserMixin):
     is_trainer = db.Column(db.Boolean, default=False)
     datetime_created = db.Column(db.DateTime, default=datetime.now())
 
+    dogs = db.relationship("Dog", backref="user", lazy=True)
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
 

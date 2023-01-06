@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 class LoginForm(FlaskForm):
@@ -16,3 +16,11 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField("confirm password", validators=[ EqualTo("password", message="Passwords must match")])
     is_trainer = BooleanField("are you a dog trainer?")
     submit = SubmitField("submit")
+
+class AddDogForm(FlaskForm):
+        name = StringField("name", validators=[DataRequired(), Length(max=255)])
+        breed = StringField("breed", validators=[DataRequired(), Length(max=255)])
+        color = StringField("color", validators=[DataRequired(), Length(max=255)])
+        birthday = DateField("birthday")
+        dietary_info = TextAreaField("dietary info")
+        submit = SubmitField("submit")

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ current_user.first_name }} {{ current_user.last_name }}{% endblock %}
+
+{% block main %}
+    <h1>Welcome {{ current_user.first_name }} {{ current_user.last_name }}!!</h1>
+    <h3>Here is a list of your dogs...</h3>
+    {% for dog in current_user.dogs %}
+        <div>
+            {{ dog.name }}
+            {{ dog.breed }}
+            {{ dog.color }}
+        </div>    
+    {% endfor %}
+    <div>
+        <h3>Add a dog</h3>
+        <form action="{{ url_for('add_dog') }}" method="POST">
+            {{ form.csrf_token }}
+            {{ form.name.label }}
+            {{ form.name }}
+            {{ form.breed.label }}
+            {{ form.breed }}
+            {{ form.color.label }}
+            {{ form.color }}
+            {{ form.birthday.label }}
+            {{ form.birthday }}
+            {{ form.dietary_info.label }}
+            {{ form.dietary_info }}
+            {{ form.submit }}
+        </form>
+    </div>
+{% endblock %}

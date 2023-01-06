@@ -6,8 +6,8 @@ from flask_login import (LoginManager,
                         current_user)
 
 
-from model import db, connect_to_db, User
-from forms import LoginForm, RegisterForm
+from model import db, connect_to_db, User, Dog
+from forms import LoginForm, RegisterForm, AddDogForm
 
 app = Flask(__name__)
 
@@ -81,7 +81,27 @@ def home():
     if current_user.is_trainer:
         return "trainer home page"
     else:
-        return "dog owner homepage"
+        form = AddDogForm()
+        return render_template("homepage-owner.html", form=form)
+
+@app.route("/add-dog", methods=["POST"])
+def add_dog():
+    form = AddDogForm()
+    name = form.name.data 
+    breed = form.breed.data 
+    color = form.color.data 
+    birthday = form.birthday.data 
+    dietary_info = form.dietary_info.data
+
+    new_dog = Dog(current_user.id, name, breed, color, birthday, dietary_info)
+
+    print(new_dog)
+    try:
+        db.session.add(new_dog)
+        db.session.commit()
+        return redirect(url_for("home"))
+    except:
+        return "Error adding your dog"
 
 @app.route("/messages")
 @login_required

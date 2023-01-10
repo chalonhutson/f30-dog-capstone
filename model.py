@@ -19,6 +19,12 @@ class User(db.Model, UserMixin):
 
     dogs = db.relationship("Dog", backref="user", lazy=True)
 
+    def get_received_messages(self):
+        return Message.query.filter_by(to_user_id=self.id).all()
+
+    def get_sent_messages(self):
+        return Message.query.filter_by(from_user_id=self.id).all()
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
@@ -65,6 +71,12 @@ class Message(db.Model):
     to_user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     content = db.Column(db.String(255), nullable=False)
     datetime_created = db.Column(db.DateTime, default=datetime.now())
+
+    # dog = db.relationship("Dog", backref="messages")
+
+    def get_message_sender(self):
+        return User.query.get(self.from_user_id)
+
 
     def __init__(self, dog_id, from_user_id, to_user_id, content):
         self.dog_id = dog_id

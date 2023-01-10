@@ -59,3 +59,13 @@ dog5 = Dog(5, "Charlie", "Great Dane / Weireimmer", "Brown & White", datetime(20
 # Commit dogs to database
 db.session.add_all([dog1, dog2, dog3, dog4, dog5])
 db.session.commit()
+
+
+# Dummy messages
+
+message1 = Message(1, 1, 6, "I'll tell ya hwhat Mr. Milan, Ladybird is the best dang dog in Texas!")
+message2 = Message(1, 6, 1, "I am the dog whispererrrrrrrrrr.")
+message3 = Message(1, 1, 6, "My boy bobby ain't right!")
+
+db.session.add_all([message1, message2, message3])
+db.session.commit()

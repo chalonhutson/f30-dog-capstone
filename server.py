@@ -79,7 +79,7 @@ def register():
 @login_required
 def home():
     if current_user.is_trainer:
-        return "trainer home page"
+        return render_template("homepage-trainer.html")
     else:
         form = AddDogForm()
         return render_template("homepage-owner.html", form=form)

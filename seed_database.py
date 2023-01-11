@@ -66,6 +66,13 @@ db.session.commit()
 message1 = Message(1, 1, 6, "I'll tell ya hwhat Mr. Milan, Ladybird is the best dang dog in Texas!")
 message2 = Message(1, 6, 1, "I am the dog whispererrrrrrrrrr.")
 message3 = Message(1, 1, 6, "My boy bobby ain't right!")
+message4 = Message(2, 2, 6, "eheheheeheheeehehehehe")
+message5 = Message(2, 2, 6, "I fought a chicken")
+message6 = Message(2, 6, 2, "Okay????? anything about Brian you wannna tell be?")
 
-db.session.add_all([message1, message2, message3])
+
+
+
+db.session.add_all([message1, message2, message3, message4
+, message5, message6])
 db.session.commit()

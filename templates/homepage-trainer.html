@@ -5,9 +5,22 @@
 {% block main %}
 <h1>Welcome {{ current_user.first_name }} {{ current_user.last_name }}!!</h1>
 
-{% for message in current_user.get_received_messages() %}
-    <p>From: {{ message.get_message_sender().first_name }} {{ message.get_message_sender().last_name }}</p>
-    <p>{{ message.content }}</p>
-    <p>Sent: {{ message.datetime_created }}</p>
+{% for message_list in current_user.get_sorted_messages() %}
+    <div style="background-color: blue">
+        {% for message in message_list %}
+        <div style="background-color: rgba(255, 0, 0, .15)">
+            {{ message.update_message_attributes() }}
+            {{ message.readable_date }}
+            <p>Dog: {{ message.dog.name }}</p>  
+            {% if message.sender.id == current_user.id %}  
+            <p>From: you</p>
+            {% else %}
+            <p>From: {{ message.sender.first_name }} {{ message.sender.last_name }}</p>
+            {% endif %}
+            <p>{{ message.content }}</p>
+            <p>Sent: {{ message.readable_date }}</p>
+        </div>
+        {% endfor %}
+    </div><br>
 {% endfor %}
 {% endblock %}

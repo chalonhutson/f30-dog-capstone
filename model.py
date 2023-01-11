@@ -19,11 +19,32 @@ class User(db.Model, UserMixin):
 
     dogs = db.relationship("Dog", backref="user", lazy=True)
 
+
     def get_received_messages(self):
         return Message.query.filter_by(to_user_id=self.id).all()
 
     def get_sent_messages(self):
         return Message.query.filter_by(from_user_id=self.id).all()
+
+    def get_sorted_messages(self):
+        received_messages = self.get_received_messages()
+        sent_messages = self.get_sent_messages()
+
+        all_messages = received_messages + sent_messages
+
+        dog_ids = set()
+
+        for message in all_messages:
+            dog_ids.add(message.dog_id)
+
+        new_messages = []
+
+        for dog_id in dog_ids:
+            dog_messages = Message.query.filter_by(dog_id=dog_id).all()
+            get_datetime = lambda x: x.datetime_created
+            new_messages.append(sorted(dog_messages, key=get_datetime))
+
+        return new_messages
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -72,7 +93,12 @@ class Message(db.Model):
     content = db.Column(db.String(255), nullable=False)
     datetime_created = db.Column(db.DateTime, default=datetime.now())
 
-    # dog = db.relationship("Dog", backref="messages")
+    dog = db.relationship("Dog", backref="messages")
+
+    def update_message_attributes(self):
+        self.reciever = User.query.get(self.to_user_id)
+        self.sender = User.query.get(self.from_user_id)
+        self.readable_date = self.datetime_created.strftime("%a %b %d %I:%M %p")
 
     def get_message_sender(self):
         return User.query.get(self.from_user_id)

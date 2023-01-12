@@ -5,12 +5,15 @@ from flask_login import (LoginManager,
                         logout_user, 
                         current_user)
 
+from flask_migrate import Migrate
 
-from model import db, connect_to_db, User, Dog
-from forms import LoginForm, RegisterForm, AddDogForm
+
+from src.model import db, connect_to_db, User, Dog
+from src.forms import LoginForm, RegisterForm, AddDogForm
 
 app = Flask(__name__)
-
+connect_to_db(app)
+migrate = Migrate(app, db)
 app.secret_key = "jinja ninja"
 
 login_manager = LoginManager()
@@ -115,6 +118,3 @@ def profile(trainer_id):
     return f"this is the profile of trainer {trainer_id}"
 
 
-if __name__ == "__main__":
-    connect_to_db(app)
-    app.run(debug=True)

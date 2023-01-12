@@ -1,22 +1,23 @@
 import os
 from datetime import datetime
 from flask import Flask
-from model import db, connect_to_db, User, Dog, Message, Post, Connect
+from .model import db, connect_to_db, User, Dog, Message, Post, Connect
 
 app = Flask(__name__)
 
 connect_to_db(app)
 
 # Drop the existing database
-try:
-    os.system("dropdb -U postgres dog-app")
-    os.system("createdb -U postgres dog-app")
+# try:
+#     os.system("dropdb -U postgres dog-app")
+#     os.system("createdb -U postgres dog-app")
 
 # Recreate the dog-app database
-except:
-    os.system("createdb dog-app")
+# except:
+#     os.system("createdb dog-app")
 
 # Creates our tables
+db.drop_all()
 db.create_all()
 
 # Dummy users
